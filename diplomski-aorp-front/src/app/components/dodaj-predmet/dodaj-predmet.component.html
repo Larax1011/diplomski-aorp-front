@@ -1,0 +1,120 @@
+<div class="pb-4">
+
+  <!--CREATE FORM-->
+  <div class="pb-4">
+    <form [formGroup]="createPredmetForm" (submit)="createPredmet()" class="mb-5 d-flex flex-column gap-3">
+      <div class="form-group d-flex flex-column gap-1">
+        <div class="col-4">
+          <label for="naziv">Naziv</label>
+          <input type="text" class="form-control" id="naziv" placeholder="Naziv" [formControlName]="'naziv'">
+
+          <label for="tip_studija">Tip studija</label>
+          <input type="text" class="form-control" id="tip_studija" placeholder="Tip studija" [formControlName]="'tip_studija'">
+        </div>
+
+        <div class="col-1">
+          <label for="espb">ESPB</label>
+          <input type="number" class="form-control" id="espb" [formControlName]="'espb'">
+
+          <label for="semestar">Semestar</label>
+          <input type="number" class="form-control" id="semestar" [formControlName]="'semestar'">
+
+          <label for="fond_predavanja">Fond Predavanja</label>
+          <input type="number" class="form-control" id="fond_predavanja" [formControlName]="'fond_predavanja'">
+
+          <label for="fond_vezbe">Fond Vezbe</label>
+          <input type="number" class="form-control" id="fond_vezbe" [formControlName]="'fond_vezbe'">
+
+          <label for="fond_praktikum">Fond Praktikum</label>
+          <input type="number" class="form-control" id="fond_praktikum" [formControlName]="'fond_praktikum'">
+        </div>
+        <div class="col-1">
+          <button [disabled]="!createPredmetForm.valid" type="submit" class="btn btn-primary">Dodaj</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--LISTA SVIH PREDAVACA-->
+  <div class="col-8">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predmeti</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter predmeta" [(ngModel)]="searchPredmetText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover text-center">
+        <thead>
+        <tr>
+          <th style="width: 5%" scope="col">ID</th>
+          <th style="width: 15%" scope="col">Naziv</th>
+          <th style="width: 20%" scope="col">Studije</th>
+          <th style="width: 25%" scope="col">ESPB</th>
+          <th style="width: 15%" scope="col">Semestar</th>
+          <th style="width: 15%" scope="col">Fond Predavanja</th>
+          <th style="width: 15%" scope="col">Fond Vezbe</th>
+          <th style="width: 15%" scope="col">Fond Praktikum</th>
+          <th style="width: 20%" scope="col">Delete</th>
+          <th style="width: 20%" scope="col">Save</th>
+
+        </tr>
+        </thead>
+        <tbody *ngFor="let predmet of predmeti | search: searchPredmetText; index as i">
+        <tr [formGroup]="updatePredmetForm" (dblclick)="toggleEditable(i, predmet)">
+          <td> {{predmet.id}} </td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'naziv'"
+                                                     placeholder="{{predmet.naziv}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'tip_studija'"
+                                                     placeholder="{{predmet.tip_studija}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'espb'"
+                                                     placeholder="{{predmet.espb}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'semestar'"
+                                                     placeholder="{{predmet.semestar}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'fond_predavanja'"
+                                                     placeholder="{{predmet.fond_predavanja}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'fond_vezbe'"
+                                                     placeholder="{{predmet.fond_vezbe}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'fond_praktikum'"
+                                                     placeholder="{{predmet.fond_praktikum}}"></td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.naziv}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.tip_studija}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.espb}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.semestar}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.fond_predavanja}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.fond_vezbe}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predmet.fond_praktikum}} </td>
+          <td>
+            <button type="submit" mat-raised-button color="warn" (click)="deletePredmet(predmet)">
+              Delete
+            </button>
+          </td>
+          <td>
+            <button type="submit" mat-raised-button color="primary" (click)="updatePredmet(predmet)">
+              Save
+            </button>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+<!--    <button (click)="testPrint()">-->
+<!--      TESTPRINT-->
+<!--    </button>-->
+
+
+  </div>
+</div>

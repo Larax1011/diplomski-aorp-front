@@ -1,0 +1,80 @@
+<div class="pb-4">
+
+  <!--CREATE FORM-->
+  <div class="pb-4">
+    <form [formGroup]="createPredavacForm" (submit)="createPredavac()" class="mb-5 d-flex flex-column gap-3">
+      <div class="form-group  d-flex flex-column gap-1">
+        <label for="ime">Ime</label>
+        <input type="text" class="form-control" id="ime" placeholder="Ime" [formControlName]="'name'">
+        <label for="prezime">Prezime</label>
+        <input type="text" class="form-control" id="prezime" placeholder="Prezime" [formControlName]="'lastname'">
+        <label for="email">Email</label>
+        <input type="text" class="form-control" id="email" placeholder="Email" [formControlName]="'email'">
+        <label for="tip">Tip</label>
+        <input type="text" class="form-control" id="tip" placeholder="Profesor/Asistent/Saradnik" [formControlName]="'type'">
+      </div>
+      <button [disabled]="!createPredavacForm.valid" type="submit" class="btn btn-primary">Dodaj</button>
+    </form>
+  </div>
+
+  <!--LISTA SVIH PREDAVACA-->
+  <div class="col-8">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predavaci</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter predavaca" [(ngModel)]="searchPredavacText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 5%" scope="col">ID</th>
+          <th style="width: 15%" scope="col">Ime</th>
+          <th style="width: 20%" scope="col">Prezime</th>
+          <th style="width: 25%" scope="col">Email</th>
+          <th style="width: 15%" scope="col">Tip</th>
+          <th style="width: 20%" scope="col"></th>
+          <th style="width: 20%" scope="col"></th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let predavac of predavaci | search: searchPredavacText; index as i">
+        <tr [formGroup]="updatePredavacForm" (dblclick)="toggleEditable(i, predavac)">
+          <td> {{predavac.id}} </td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i" [formControlName]="'name'"
+                                                     placeholder="{{predavac.name}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'lastname'" placeholder="{{predavac.lastname}}">
+          </td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'email'" placeholder="{{predavac.email}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i" [formControlName]="'type'"
+                                                     placeholder="{{predavac.type}}"></td>
+          <td [hidden]="enableEditIndex == i"> {{predavac.name}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predavac.lastname}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predavac.email}} </td>
+          <td [hidden]="enableEditIndex == i"> {{predavac.type}} </td>
+          <td>
+            <button type="submit" mat-raised-button color="warn" (click)="deletePredavac(predavac)">
+              Delete
+            </button>
+          </td>
+          <td>
+            <button type="submit" mat-raised-button color="primary" (click)="updatePredavac(predavac)">
+              Save
+            </button>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+<!--    <button (click)="testPrint()">-->
+<!--      TESTPRINT-->
+<!--    </button>-->
+
+
+  </div>
+</div>

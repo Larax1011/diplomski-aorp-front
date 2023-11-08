@@ -1,0 +1,81 @@
+<div class="pb-4">
+
+  <!--CREATE FORM-->
+  <div class="pb-4">
+    <form [formGroup]="createSkolskaGodinaForm" (submit)="createSkolskaGodina()" class="mb-5 d-flex flex-column gap-3">
+      <div class="form-group d-flex flex-column gap-1">
+        <div class="col-1">
+          <label for="pocetnaGodina">Pocetna Godina</label>
+          <input type="number" class="form-control" id="pocetnaGodina" [formControlName]="'pocetnaGodina'">
+
+          <label for="krajnjaGodina">Krajnja Godina</label>
+          <input type="number" class="form-control" id="krajnjaGodina" [formControlName]="'krajnjaGodina'">
+
+          <label for="brNedeljaUSemestru">Broj Nedelja</label>
+          <input type="number" class="form-control" id="brNedeljaUSemestru" [formControlName]="'brNedeljaUSemestru'">
+        </div>
+        <div class="col-1">
+          <button [disabled]="!createSkolskaGodinaForm.valid" type="submit" class="btn btn-primary">Dodaj</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--LISTA SVIH GODIN-->
+  <div class="col-8">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Lista Skolskih Godina</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter skolskaGodina" [(ngModel)]="searchSkolskaGodinaText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover text-center">
+        <thead>
+        <tr>
+          <th style="width: 5%" scope="col">ID</th>
+          <th style="width: 15%" scope="col">Pocetna</th>
+          <th style="width: 20%" scope="col">Krajnja</th>
+          <th style="width: 25%" scope="col">Broj nedelja u semestru</th>
+          <th style="width: 20%" scope="col">Delete</th>
+          <th style="width: 20%" scope="col">Save</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let skolskaGodina of godine | search: searchSkolskaGodinaText; index as i">
+        <tr [formGroup]="updateSkolskaGodinaForm" (dblclick)="toggleEditable(i, skolskaGodina)">
+          <td> {{skolskaGodina.id}} </td>
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'pocetnaGodina'"
+                                                     placeholder="{{skolskaGodina.pocetnaGodina}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'krajnjaGodina'"
+                                                     placeholder="{{skolskaGodina.krajnjaGodina}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'brNedeljaUSemestru'"
+                                                     placeholder="{{skolskaGodina.brNedeljaUSemestru}}"></td>
+          <td [hidden]="enableEditIndex == i"> {{skolskaGodina.pocetnaGodina}} </td>
+          <td [hidden]="enableEditIndex == i"> {{skolskaGodina.krajnjaGodina}} </td>
+          <td [hidden]="enableEditIndex == i"> {{skolskaGodina.brNedeljaUSemestru}} </td>
+          <td>
+            <button type="submit" mat-raised-button color="warn" (click)="deleteSkolskaGodina(skolskaGodina)">
+              Delete
+            </button>
+          </td>
+          <td>
+            <button type="submit" mat-raised-button color="primary" (click)="updateSkolskaGodina(skolskaGodina)">
+              Save
+            </button>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--    <button (click)="testPrint()">-->
+    <!--      TESTPRINT-->
+    <!--    </button>-->
+
+
+  </div>
+</div>

@@ -1,0 +1,199 @@
+<div class="pb-4">
+  <div class="row pb-4">
+    <!--PREDAVAC-->
+    <div class="col-6">
+      <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predavaci</h1>
+      <mat-form-field>
+        <input type="text" placeholder="Filter predavaca" [(ngModel)]="searchPredavacText" matInput>
+      </mat-form-field>
+      <div class="scrollit">
+        <table class="table table-striped table-dark table-hover">
+          <thead>
+          <tr>
+            <th style="width: 20%" scope="col">ID</th>
+            <th style="width: 20%" scope="col">Ime</th>
+            <th style="width: 20%" scope="col">Prezime</th>
+            <th style="width: 20%" scope="col">Email</th>
+            <th style="width: 20%" scope="col">Selected</th>
+          </tr>
+          </thead>
+          <tbody *ngFor="let predavac of predavaci | search: searchPredavacText">
+          <tr>
+            <td> {{predavac.id}} </td>
+            <td> {{predavac.name}} </td>
+            <td> {{predavac.lastname}} </td>
+            <td> {{predavac.email}} </td>
+            <td>
+              <button [hidden]="predavac == predavanjeCreateForm.get('predavac')?.value" type="submit" mat-raised-button
+                      color="primary"
+                      (click)="selectPredavac(predavac)">Select
+              </button>
+              <button [hidden]="predavac != predavanjeCreateForm.get('predavac')?.value" type="submit" mat-raised-button
+                      color="warn"
+                      (click)="deselectPredavac()">Deselect
+              </button>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+    <!--PREDMET-->
+    <div class="col-6">
+      <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predmeti</h1>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Filter predmeta" [(ngModel)]="searchPredmetText">
+      </mat-form-field>
+      <div class="scrollit">
+        <table class="table table-striped table-dark table-hover">
+          <thead>
+          <tr>
+            <th style="width: 20%" scope="col">ID</th>
+            <th style="width: 20%" scope="col">Naziv</th>
+            <th style="width: 20%" scope="col">Semestar</th>
+            <th style="width: 20%" scope="col">Studije</th>
+            <th style="width: 20%" scope="col">Selected</th>
+          </tr>
+          </thead>
+          <tbody *ngFor="let predmet of predmeti | search: searchPredmetText">
+          <tr>
+            <td> {{predmet.id}} </td>
+            <td> {{predmet.naziv}} </td>
+            <td> {{predmet.semestar}} </td>
+            <td> {{predmet.tip_studija}} </td>
+            <td>
+              <button [hidden]="predmet == predavanjeCreateForm.get('predmet')?.value" type="submit" mat-raised-button
+                      color="primary"
+                      (click)="selectPredmet(predmet)">Select
+              </button>
+              <button [hidden]="predmet != predavanjeCreateForm.get('predmet')?.value" type="submit" mat-raised-button
+                      color="warn"
+                      (click)="deselectPredmet()">Deselect
+              </button>
+            </td>
+          </tr>
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="pt-4 pb-4 row">
+    <!--GODINA-->
+    <div class="col-4">
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Skolska Godina</h4>
+      <mat-form-field [formGroup]="predavanjeCreateForm">
+        <mat-label>Izaberite godinu</mat-label>
+        <mat-select [formControlName]="'godina'">
+          <mat-option *ngFor="let godina of skolskeGodine" [value]="godina">
+            {{godina.pocetnaGodina}}/{{godina.krajnjaGodina}} - {{godina.brNedeljaUSemestru}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!--TIP-->
+    <div class="col-4">
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Tip Predavanja</h4>
+      <mat-form-field [formGroup]="predavanjeCreateForm">
+        <mat-label>Izaberite tip</mat-label>
+        <mat-select [formControlName]="'tip'">
+          <mat-option value="Predavanje">Predavanje</mat-option>
+          <mat-option value="Vezbe">Vezbe</mat-option>
+          <mat-option value="Praktikum">Praktikum</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!--BROJ TERMINA-->
+    <div [formGroup]="predavanjeCreateForm" class="col-4">
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Broj Termina</h4>
+      <mat-form-field>
+        <input [formControlName]="'br_termina'" min="0" type="number" matInput>
+      </mat-form-field>
+    </div>
+  </div>
+  <button [disabled]="!predavanjeCreateForm.valid" type="submit" mat-raised-button color="primary"
+          (click)="createPredavanje()">Create Predavanje
+  </button>
+
+  <!--PREDAVANJA-->
+  <div class="col-8 p-4 offset-2">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predavanja</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter predavanja" [(ngModel)]="searchPredavanjeText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%" scope="col">ID</th>
+          <th style="width: 20%" scope="col">Predavac</th>
+          <th style="width: 20%" scope="col">Predmet</th>
+          <th style="width: 20%" scope="col">Tip</th>
+          <th style="width: 20%" scope="col">Broj termina</th>
+          <th style="width: 20%" scope="col">Skolska godina</th>
+          <th style="width: 20%" scope="col"></th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let predavanje of predavanja | search: searchPredavanjeText">
+        <tr>
+          <td> {{predavanje.id}} </td>
+          <td> {{predavanje.predavac.name}} {{predavanje.predavac.lastname}}</td>
+          <td> {{predavanje.predmet.naziv}} </td>
+          <td> {{predavanje.tip}} </td>
+          <td> {{predavanje.br_termina}} </td>
+          <td> {{predavanje.skolskaGodina.pocetnaGodina}}/{{predavanje.skolskaGodina.krajnjaGodina}} </td>
+          <td>
+            <button type="primary" mat-raised-button
+                    color="warn"
+                    (click)="deletePredavanje(predavanje)">DELETE
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--NERASPOREDJENI TERMINI-->
+  <div class="col-8 p-4 offset-2">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Nerasporedjeni i nepotpuno rasporedjeni predmeti</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter nerasporedjene predmete" [(ngModel)]="searchNerasporedjeniText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%" scope="col">ID</th>
+          <th style="width: 20%" scope="col">Naziv</th>
+          <th style="width: 20%" scope="col">Semestar</th>
+          <th style="width: 20%" scope="col">Studije</th>
+          <th style="width: 20%" scope="col">Predavanja</th>
+          <th style="width: 20%" scope="col">Vezbe</th>
+          <th style="width: 20%" scope="col">Praktikum</th>
+
+        </tr>
+        </thead>
+        <tbody *ngFor="let np of nerasporedjeniPredmeti | search: searchNerasporedjeniText">
+        <tr>
+          <td> {{np.predmet.id}} </td>
+          <td> {{np.predmet.naziv}} </td>
+          <td> {{np.predmet.semestar}} </td>
+          <td> {{np.predmet.tip_studija}} </td>
+          <td> {{np.brRasporedjenihPredavanja}}/{{np.termini.br_termina_predavanja}} </td>
+          <td> {{np.brRasporedjenihVezbi}}/{{np.termini.br_termina_vezbe}} </td>
+          <td> {{np.brRasporedjenihPraktikuma}}/{{np.termini.br_termina_praktikum}} </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<!--    <button type="submit" mat-raised-button color="blue"-->
+<!--            (click)="testPrint()">TEST-->
+<!--    </button>-->
+
+</div>

@@ -1,0 +1,37 @@
+<div class="pt-4 pb-4 row">
+  <!--GODINA-->
+  <div class="col-4">
+    <h4 style="font-family: Sans-serif, serif; text-align: left">Skolska Godina</h4>
+    <mat-form-field [formGroup]="getIzvestajForm">
+      <mat-label>Izaberite godinu</mat-label>
+      <mat-select [formControlName]="'godina'" [value]="godine[0]">
+        <mat-option *ngFor="let godina of godine" [value]="godina">
+          {{godina.pocetnaGodina}}/{{godina.krajnjaGodina}} - {{godina.brNedeljaUSemestru}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!--TIP-->
+  <div class="col-4">
+    <h4 style="font-family: Sans-serif, serif; text-align: left">Tip Izvestaja</h4>
+    <mat-form-field [formGroup]="getIzvestajForm">
+      <mat-label>Izaberite tip</mat-label>
+      <mat-select [formControlName]="'tip'">
+        <mat-option value="predmet">Po predmetu</mat-option>
+        <mat-option value="profesor">Po profesoru</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div [formGroup]="getIzvestajForm">
+      <mat-checkbox [formControlName]="'vanredniCasovi'" [hidden]="getIzvestajForm.get('tip')?.value != 'profesor'">Vanredni casovi</mat-checkbox>
+    </div>
+  </div>
+  <!--BROJ TERMINA-->
+
+</div>
+<button [disabled]="!getIzvestajForm.valid" type="submit" mat-raised-button color="primary"
+        (click)="getIzvestaj()">Stampaj izvestaj
+</button>
+
+<!--<button (click)="testPrint()">-->
+<!--  test print-->
+<!--</button>-->

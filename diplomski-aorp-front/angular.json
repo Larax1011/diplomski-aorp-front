@@ -3,9 +3,26 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Diplomski-AORP-Front": {
+    "diplomski-aorp-front": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss",
+          "skipTests": true
+        },
+        "@schematics/angular:class": {
+          "skipTests": true
+        },
+        "@schematics/angular:directive": {
+          "skipTests": true
+        },
+        "@schematics/angular:pipe": {
+          "skipTests": true
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -25,6 +42,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -60,10 +78,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Diplomski-AORP-Front:build:production"
+              "browserTarget": "diplomski-aorp-front:build:production"
             },
             "development": {
-              "browserTarget": "Diplomski-AORP-Front:build:development"
+              "browserTarget": "diplomski-aorp-front:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -71,7 +89,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Diplomski-AORP-Front:build"
+            "browserTarget": "diplomski-aorp-front:build"
           }
         },
         "test": {
@@ -87,6 +105,7 @@
               "src/assets"
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []

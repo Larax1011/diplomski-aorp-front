@@ -1,0 +1,140 @@
+<div class="pb-4">
+  <!--PREDMET-->
+  <div class="col-6 pb-4">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predmeti</h1>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Filter predmeta" [(ngModel)]="searchPredmetText">
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%" scope="col">ID</th>
+          <th style="width: 20%" scope="col">Naziv</th>
+          <th style="width: 20%" scope="col">Semestar</th>
+          <th style="width: 20%" scope="col">Studije</th>
+          <th style="width: 20%" scope="col">Selected</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let predmet of predmeti | search: searchPredmetText">
+        <tr>
+          <td> {{predmet.id}} </td>
+          <td> {{predmet.naziv}} </td>
+          <td> {{predmet.semestar}} </td>
+          <td> {{predmet.tip_studija}} </td>
+          <td>
+            <button [hidden]="predmet == createTerminiForm.get('predmet')?.value" type="submit" mat-raised-button
+                    color="primary"
+                    (click)="selectPredmet(predmet)">Select
+            </button>
+            <button [hidden]="predmet != createTerminiForm.get('predmet')?.value" type="submit" mat-raised-button
+                    color="warn"
+                    (click)="deselectPredmet()">Deselect
+            </button>
+          </td>
+        </tr>
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+      </table>
+    </div>
+  </div>
+
+
+  <div class="pt-4 pb-4 row">
+    <!--GODINA-->
+    <div class="col-4">
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Skolska Godina</h4>
+      <mat-form-field [formGroup]="createTerminiForm">
+        <mat-label>Izaberite godinu</mat-label>
+        <mat-select [formControlName]="'skolskaGodina'">
+          <mat-option *ngFor="let godina of godine" [value]="godina">
+            {{godina.pocetnaGodina}}/{{godina.krajnjaGodina}} - {{godina.brNedeljaUSemestru}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <!--BROJ TERMINA-->
+    <div [formGroup]="createTerminiForm" class="col-4">
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Broj Termina Predavanja</h4>
+      <mat-form-field>
+        <input [formControlName]="'brPredavanja'" min="0" type="number" matInput>
+      </mat-form-field>
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Broj Termina Vezbi</h4>
+      <mat-form-field>
+        <input [formControlName]="'brVezbe'" min="0" type="number" matInput>
+      </mat-form-field>
+      <h4 style="font-family: Sans-serif, serif; text-align: left">Broj Termina Praktikum</h4>
+      <mat-form-field>
+        <input [formControlName]="'brPraktikum'" min="0" type="number" matInput>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <button [disabled]="!createTerminiForm.valid" type="submit" mat-raised-button color="primary"
+          (click)="createTermini()">Create Termine
+  </button>
+
+  <!--TERMINI-->
+  <div class="col-8 p-4 offset-2">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Termini</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter termina" [(ngModel)]="searchTerminiText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%" scope="col">ID</th>
+          <th style="width: 20%" scope="col">Naziv Predmeta</th>
+          <th style="width: 20%" scope="col">Za Godinu</th>
+          <th style="width: 20%" scope="col"># termina predavanja</th>
+          <th style="width: 20%" scope="col"># termina vezbi</th>
+          <th style="width: 20%" scope="col"># termina praktikum</th>
+          <th style="width: 20%" scope="col"></th>
+          <th style="width: 20%" scope="col"></th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let termini of terminiList | search: searchTerminiText; index as i">
+        <tr [formGroup]="updateTerminiForm" (dblclick)="toggleEditable(i, termini)">
+          <td> {{termini.id}} </td>
+          <td> {{termini.predmet.naziv}}</td>
+          <td> {{termini.skolskaGodina.pocetnaGodina}}/{{termini.skolskaGodina.krajnjaGodina}} </td>
+
+          <td [hidden]="enableEditIndex == i"> {{termini.br_termina_predavanja}} </td>
+          <td [hidden]="enableEditIndex == i"> {{termini.br_termina_vezbe}} </td>
+          <td [hidden]="enableEditIndex == i"> {{termini.br_termina_praktikum}} </td>
+
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'brPredavanja'"
+                                                     placeholder="{{termini.br_termina_predavanja}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'brVezbe'"
+                                                     placeholder="{{termini.br_termina_vezbe}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'brPraktikum'"
+                                                     placeholder="{{termini.br_termina_praktikum}}"></td>
+
+          <td>
+            <button type="primary" mat-raised-button
+                    color="warn"
+                    (click)="deleteTermini(termini)">DELETE
+            </button>
+          </td>
+          <td>
+            <button type="submit" mat-raised-button color="primary" (click)="updateTermini(termini)">
+              Save
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--  <button type="submit" mat-raised-button color="blue"-->
+  <!--          (click)="testPrint()">TEST-->
+  <!--  </button>-->
+
+</div>

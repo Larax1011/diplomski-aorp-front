@@ -1,0 +1,23 @@
+<header>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a [routerLink]="'/'" class="navbar-brand">AORP</a>
+
+      <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a [routerLink]="'/raspodela'" class="nav-link active" aria-current="page">Raspodela</a>
+          <a [routerLink]="'/izvestaj'" class="nav-link active" aria-current="page">Izvestaj</a>
+          <a [routerLink]="'/termini'" class="nav-link active" aria-current="page">Dodaj grupe/termine za predmet</a>
+          <a [routerLink]="'/predavac'" class="nav-link active" aria-current="page">Dodaj predavaca</a>
+          <a [routerLink]="'/predmet'" class="nav-link active" aria-current="page">Dodaj predmet</a>
+          <a [routerLink]="'/vanredniCas'" class="nav-link active" aria-current="page">Dodaj vanredni cas</a>
+          <a [routerLink]="'/skolskaGodina'" class="nav-link active" aria-current="page">Dodaj skolsku godinu</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<div class="container pt-3">
+  <router-outlet></router-outlet>
+</div>

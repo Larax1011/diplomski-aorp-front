@@ -1,0 +1,132 @@
+<div class="pb-4">
+  <!--PREDAVACI-->
+  <div class="col-7">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Predavaci</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter predavaca" [(ngModel)]="searchPredavacText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%" scope="col">ID</th>
+          <th style="width: 20%" scope="col">Ime</th>
+          <th style="width: 20%" scope="col">Prezime</th>
+          <th style="width: 20%" scope="col">Email</th>
+          <th style="width: 20%" scope="col">Selected</th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let predavac of predavaci | search: searchPredavacText">
+        <tr>
+          <td> {{predavac.id}} </td>
+          <td> {{predavac.name}} </td>
+          <td> {{predavac.lastname}} </td>
+          <td> {{predavac.email}} </td>
+          <td>
+            <button [hidden]="predavac == createVanredniCasForm.get('predavac')?.value" type="submit" mat-raised-button
+                    color="primary"
+                    (click)="selectPredavac(predavac)">Select
+            </button>
+            <button [hidden]="predavac != createVanredniCasForm.get('predavac')?.value" type="submit" mat-raised-button
+                    color="warn"
+                    (click)="deselectPredavac()">Deselect
+            </button>
+
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!--GODINA-->
+  <div>
+    <h4 style="font-family: Sans-serif, serif; text-align: left">Skolska Godina</h4>
+    <mat-form-field [formGroup]="createVanredniCasForm">
+      <mat-label>Izaberite godinu</mat-label>
+      <mat-select [formControlName]="'godina'">
+        <mat-option *ngFor="let godina of godine" [value]="godina">
+          {{godina.pocetnaGodina}}/{{godina.krajnjaGodina}} - {{godina.brNedeljaUSemestru}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <!--OPIS-->
+  <div [formGroup]="createVanredniCasForm">
+    <h4 style="font-family: Sans-serif, serif; text-align: left">Opis</h4>
+    <mat-form-field>
+      <input [formControlName]="'opis'" type="text" matInput>
+    </mat-form-field>
+  </div>
+  <!--BROJ TERMINA-->
+  <div [formGroup]="createVanredniCasForm">
+    <h4 style="font-family: Sans-serif, serif; text-align: left">Broj Racunatih Casova</h4>
+    <mat-form-field>
+      <input [formControlName]="'br_casova'" min="0" type="number" matInput>
+    </mat-form-field>
+  </div>
+
+  <button [disabled]="!createVanredniCasForm.valid" type="submit" mat-raised-button color="primary"
+          (click)="createVanredniCas()">Create Vanredni Cas
+  </button>
+
+  <!--VANREDNI CASOVI-->
+  <div class="col-10 p-4 offset-1">
+    <h1 style="font-family: Sans-serif, serif; text-align: center" class="mb-4 pb-2 pb-md-0 mb-md-5">Vanredni Casovi</h1>
+    <mat-form-field>
+      <input type="text" placeholder="Filter predavanja" [(ngModel)]="searchVanredniCasoviText" matInput>
+    </mat-form-field>
+    <div class="scrollit">
+      <table class="table table-striped table-dark table-hover">
+        <thead>
+        <tr>
+          <th style="width: 20%" scope="col">ID</th>
+          <th style="width: 20%" scope="col">Predavac</th>
+          <th style="width: 20%" scope="col">Email predavaca</th>
+          <th style="width: 20%" scope="col">Skolska Godina</th>
+          <th style="width: 20%" scope="col">Opis</th>
+          <th style="width: 20%" scope="col">Broj Casova</th>
+          <th style="width: 20%" scope="col"></th>
+          <th style="width: 20%" scope="col"></th>
+        </tr>
+        </thead>
+        <tbody *ngFor="let vanredniCas of vanredniCasovi | search: searchVanredniCasoviText; index as i">
+        <tr [formGroup]="updateVanredniCasForm" (dblclick)="toggleEditable(i, vanredniCas)">
+          <td> {{vanredniCas.id}} </td>
+          <td> {{vanredniCas.predavac.name}} {{vanredniCas.predavac.lastname}}</td>
+          <td> {{vanredniCas.predavac.email}}</td>
+          <td> {{vanredniCas.skolskaGodina.pocetnaGodina}}/{{vanredniCas.skolskaGodina.krajnjaGodina}} </td>
+
+          <td [hidden]="enableEditIndex == i"> {{vanredniCas.opis}} </td>
+          <td [hidden]="enableEditIndex == i"> {{vanredniCas.br_casova}} </td>
+
+          <td [hidden]="enableEditIndex != i"><input type='text' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'opis'"
+                                                     placeholder="{{vanredniCas.opis}}"></td>
+          <td [hidden]="enableEditIndex != i"><input type='number' class="form-control"
+                                                     [contentEditable]="enableEditIndex == i"
+                                                     [formControlName]="'br_casova'"
+                                                     placeholder="{{vanredniCas.br_casova}}"></td>
+
+          <td>
+            <button type="primary" mat-raised-button
+                    color="warn"
+                    (click)="deleteVanredniCas(vanredniCas)">DELETE
+            </button>
+          </td>
+          <td>
+            <button type="submit" mat-raised-button color="primary" (click)="updateVanredniCas(vanredniCas)">
+              Save
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--  <button type="submit" mat-raised-button color="blue"-->
+  <!--          (click)="testPrint()">TEST-->
+  <!--  </button>-->
+
+</div>
